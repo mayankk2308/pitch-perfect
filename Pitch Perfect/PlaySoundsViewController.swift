@@ -12,61 +12,61 @@ class PlaySoundsViewController: UIViewController, AVAudioPlayerDelegate {
         manageAudio.audioPlayer.delegate=self
     }
     
-    @IBAction func fastButton(sender: UIButton) {
+    @IBAction func fastButton(_ sender: UIButton) {
         showStopButton()
         manageAudio.startPlayingFastAudio()
     }
     
-    @IBAction func darthVader(sender: UIButton) {
+    @IBAction func darthVader(_ sender: UIButton) {
         showStopButton()
         manageAudio.startPlayingDarthVaderAudio()
         playSound()
     }
     
-    @IBAction func slowButton(sender: UIButton) {
+    @IBAction func slowButton(_ sender: UIButton) {
         showStopButton()
         manageAudio.startPlayingSlowAudio()
     }
     
-    @IBAction func chipmunk(sender: UIButton) {
+    @IBAction func chipmunk(_ sender: UIButton) {
         showStopButton()
         manageAudio.startPlayingChipmunkAudio()
         playSound()
     }
     
-    @IBAction func echo(sender: UIButton) {
+    @IBAction func echo(_ sender: UIButton) {
         showStopButton()
         manageAudio.startPlayingEchoAudio()
         playSound()
     }
     
-    @IBAction func reverb(sender: UIButton) {
+    @IBAction func reverb(_ sender: UIButton) {
         showStopButton()
         manageAudio.startPlayingReverbAudio()
         playSound()
     }
     
     func showStopButton(){
-        stopButton.hidden=false
+        stopButton.isHidden=false
     }
     
     func hideStopButton()->Void{
-        stopButton.hidden=true
+        stopButton.isHidden=true
     }
     
-    func audioPlayerDidFinishPlaying(player: AVAudioPlayer, successfully flag: Bool) {
+    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         if(flag){
-            stopButton.hidden=true
+            stopButton.isHidden=true
         }
     }
     
     func playSound(){
         audioNode=manageAudio.audioPlayerNode
-        audioNode.scheduleFile(manageAudio.audioFile, atTime: nil, completionHandler: hideStopButton)//completionHandler working, but very slow
+        audioNode.scheduleFile(manageAudio.audioFile, at: nil, completionHandler: hideStopButton)//completionHandler working, but very slow
         audioNode.play()
     }
     
-    @IBAction func stopAudio(sender: UIButton) {
+    @IBAction func stopAudio(_ sender: UIButton) {
         hideStopButton()
         manageAudio.stopAudio()
     }

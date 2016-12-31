@@ -3,7 +3,7 @@ import AVFoundation
 class AudioManager:NSObject{
     var recordAudio:AVAudioRecorder!
     var session:AVAudioSession!
-    var recordedAudio:NSURL!
+    var recordedAudio:URL!
     var audioPlayer:AVAudioPlayer!
     var audioPitch:AVAudioUnitTimePitch!
     var audioEngine:AVAudioEngine!
@@ -13,23 +13,23 @@ class AudioManager:NSObject{
     var audioPlayerNode:AVAudioPlayerNode!
     
     func startRecordingAudio(){
-        let dirPath=NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
-        let currentDateTime=NSDate()
-        let formatter=NSDateFormatter()
+        let dirPath=NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
+        let currentDateTime=Date()
+        let formatter=DateFormatter()
         formatter.dateFormat="ddMMyyyy-HHmmss"
-        let recordingName=formatter.stringFromDate(currentDateTime)+".wav"
-        let pathArray=[dirPath,recordingName]
-        let filePath=NSURL.fileURLWithPathComponents(pathArray)
+        let recordingName=formatter.string(from: currentDateTime)+".wav"
+        let pathArray = [dirPath, recordingName]
+        let filePath = NSURL.fileURL(withPathComponents: pathArray)
         session=AVAudioSession.sharedInstance()
         do {
             try session.setCategory(AVAudioSessionCategoryPlayAndRecord)
         } catch _ {
         }
         do {
-            try recordAudio = AVAudioRecorder(URL: filePath!, settings: [:])
+            try recordAudio = AVAudioRecorder(url: filePath!, settings: [:])
         } catch _ {
         }
-        recordAudio.meteringEnabled=true
+        recordAudio.isMeteringEnabled=true
         recordAudio.prepareToRecord()
         recordAudio.record()
     }
@@ -42,7 +42,7 @@ class AudioManager:NSObject{
         }
         recordedAudio=recordAudio.url
         do {
-            audioPlayer=try AVAudioPlayer(contentsOfURL: recordedAudio)
+            audioPlayer=try AVAudioPlayer(contentsOf: recordedAudio)
         } catch _ {
             audioPlayer = nil
         }
@@ -65,7 +65,7 @@ class AudioManager:NSObject{
         playAudioAtRate(2.0)
     }
     
-    func playAudioAtRate(rate: Float!){
+    func playAudioAtRate(_ rate: Float!){
         if(audioEngine != nil){
             audioEngine.reset()
         }
@@ -84,29 +84,29 @@ class AudioManager:NSObject{
     
     func startPlayingEchoAudio(){
         audioEcho=AVAudioUnitDistortion()
-        audioEcho.loadFactoryPreset(AVAudioUnitDistortionPreset.MultiEcho1)
+        audioEcho.loadFactoryPreset(AVAudioUnitDistortionPreset.multiEcho1)
         playAudioWithEffect(audioEcho)
     }
     
     func startPlayingReverbAudio(){
         audioReverb=AVAudioUnitReverb()
-        audioReverb.loadFactoryPreset(AVAudioUnitReverbPreset.LargeRoom)
+        audioReverb.loadFactoryPreset(AVAudioUnitReverbPreset.largeRoom)
         playAudioWithEffect(audioReverb)
     }
     
-    func playAudioWithVariablePitch(pitch: Float!){
+    func playAudioWithVariablePitch(_ pitch: Float!){
         audioPitch=AVAudioUnitTimePitch()
         audioPitch.pitch=pitch
         playAudioWithEffect(audioPitch)
     }
     
     
-    func playAudioWithEffect(node: AVAudioNode!){
+    func playAudioWithEffect(_ node: AVAudioNode!){
         stopAudio()
         audioPlayerNode=AVAudioPlayerNode()
         audioEngine=AVAudioEngine()
-        audioEngine.attachNode(audioPlayerNode)
-        audioEngine.attachNode(node)
+        audioEngine.attach(audioPlayerNode)
+        audioEngine.attach(node)
         audioEngine.connect(audioPlayerNode, to: node, format: nil)
         audioEngine.connect(node, to: audioEngine.outputNode, format: nil)
         do {

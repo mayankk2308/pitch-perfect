@@ -19,55 +19,55 @@ class RecordSoundsViewController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        recordButtonOutlet.hidden=true
-        pauseButton.hidden=true
-        playButton.hidden=true
+        recordButtonOutlet.isHidden=true
+        pauseButton.isHidden=true
+        playButton.isHidden=true
     }
     
-    override func viewWillAppear(animated: Bool) {
-        recordButtonOutlet.hidden=true
-        pauseButton.hidden=true
-        playButton.hidden=true
+    override func viewWillAppear(_ animated: Bool) {
+        recordButtonOutlet.isHidden=true
+        pauseButton.isHidden=true
+        playButton.isHidden=true
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
 
-    @IBAction func recordButton(sender: UIButton) {
-        recordButtonOutlet.hidden=false
-        pauseButton.hidden=false
-        beginRecord.enabled=false
+    @IBAction func recordButton(_ sender: UIButton) {
+        recordButtonOutlet.isHidden=false
+        pauseButton.isHidden=false
+        beginRecord.isEnabled=false
         recordLabel.text="Now Recording...."
         manageAudio=AudioManager()
         manageAudio.startRecordingAudio()
     }
 
-    @IBAction func stopButton(sender: UIButton) {
-        recordButtonOutlet.hidden=true
-        pauseButton.hidden=true
-        beginRecord.enabled=true
+    @IBAction func stopButton(_ sender: UIButton) {
+        recordButtonOutlet.isHidden=true
+        pauseButton.isHidden=true
+        beginRecord.isEnabled=true
         recordLabel.text="Tap Mic to Record"
         manageAudio.stopRecordingAudio()
     }
     
-    @IBAction func resumeRecording(sender: UIButton) {
+    @IBAction func resumeRecording(_ sender: UIButton) {
         recordLabel.text="Now Recording...."
-        playButton.hidden=true
-        pauseButton.hidden=false
+        playButton.isHidden=true
+        pauseButton.isHidden=false
         manageAudio.resumeRecordingAudio()
     }
     
-    @IBAction func pauseRecording(sender: UIButton) {
+    @IBAction func pauseRecording(_ sender: UIButton) {
         recordLabel.text="Paused Recording"
-        pauseButton.hidden=true
-        playButton.hidden=false
+        pauseButton.isHidden=true
+        playButton.isHidden=false
         manageAudio.pauseRecordingAudio()
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if(segue.identifier=="stopRecording"){
-            let playSoundsVC = segue.destinationViewController as! PlaySoundsViewController
+            let playSoundsVC = segue.destination as! PlaySoundsViewController
             let data=manageAudio
             playSoundsVC.manageAudio=data
         }
